@@ -14,6 +14,5 @@ public class App extends Application {
     public void onCreate() {
         super.onCreate();
         final MapItApi mapItApi = ApiUtils.createMapItApi();
-//        mapItApi.findLocationByCode();
     }
 }
