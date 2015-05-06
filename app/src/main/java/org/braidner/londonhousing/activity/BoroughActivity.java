@@ -1,4 +1,4 @@
-package org.braidner.londonhousing;
+package org.braidner.londonhousing.activity;
 
 import android.app.Activity;
 import android.support.v7.app.ActionBarActivity;
@@ -9,6 +9,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import org.braidner.londonhousing.R;
 import org.braidner.londonhousing.adapter.BoroughAdapter;
 import org.braidner.londonhousing.entity.Statistic;
 

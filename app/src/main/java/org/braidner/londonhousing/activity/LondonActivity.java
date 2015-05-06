@@ -1,4 +1,4 @@
-package org.braidner.londonhousing;
+package org.braidner.londonhousing.activity;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -12,9 +12,9 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Polygon;
 import com.google.android.gms.maps.model.PolygonOptions;
 
+import org.braidner.londonhousing.R;
 import org.braidner.londonhousing.model.Geometry;
 import org.braidner.londonhousing.model.Location;
-import org.braidner.londonhousing.model.Ward;
 import org.braidner.londonhousing.model.WardsHolder;
 import org.braidner.londonhousing.utils.JsonLoader;
 
