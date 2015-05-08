@@ -39,6 +39,10 @@
             android:name=".activity.BoroughActivity"
             android:label="@string/title_activity_borough" >
         </activity>
+        <activity
+            android:name=".InstallActivity"
+            android:label="@string/title_activity_install" >
+        </activity>
     </application>
 
 </manifest>
