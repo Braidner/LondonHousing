@@ -2,6 +2,9 @@ package org.braidner.londonhousing;
 
 import android.app.Application;
 
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
+
 import org.braidner.londonhousing.api.MapItApi;
 import org.braidner.londonhousing.utils.ApiUtils;
 
@@ -13,6 +16,7 @@ public class App extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        final MapItApi mapItApi = ApiUtils.createMapItApi();
+        ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(this).build();
+        ImageLoader.getInstance().init(config);
     }
 }

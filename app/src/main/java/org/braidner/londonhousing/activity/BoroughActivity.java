@@ -1,53 +1,71 @@
 package org.braidner.londonhousing.activity;
 
 import android.app.Activity;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.support.v7.widget.CardView;
+import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.Menu;
-import android.view.MenuItem;
 
 import org.braidner.londonhousing.R;
 import org.braidner.londonhousing.adapter.BoroughAdapter;
-import org.braidner.londonhousing.entity.Statistic;
+import org.braidner.londonhousing.api.StatisticsApi;
+import org.braidner.londonhousing.model.StatisticsResponse;
+import org.braidner.londonhousing.model.StatisticsWard;
+import org.braidner.londonhousing.utils.ApiUtils;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import retrofit.Callback;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
 
 
 public class BoroughActivity extends Activity {
 
     private BoroughAdapter adapter;
-    private RecyclerView view;
-    private List<Statistic> statistics = new ArrayList<>();
-    private LinearLayoutManager manager;
+    private RecyclerView recyclerView;
+    private List<StatisticsWard> statistics = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_borough);
 
-        Statistic statistic = new Statistic();
-        statistic.setCrime("Crime");
-        statistic.setHousing("Housing");
-        statistic.setTransport("Transport");
-        statistics.add(statistic);
+        recyclerView = (RecyclerView) findViewById(R.id.card_view);
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        Statistic statistic2 = new Statistic();
-        statistic2.setCrime("Transport");
-        statistic2.setHousing("Housing");
-        statistic2.setTransport("Transport");
-        statistics.add(statistic2);
+        adapter = new BoroughAdapter(statistics, this);
+        recyclerView.setAdapter(adapter);
 
-        manager = new LinearLayoutManager(this);
-        manager.setOrientation(LinearLayoutManager.VERTICAL);
-        adapter = new BoroughAdapter(statistics);
+        test();
+    }
 
-        view = (RecyclerView) findViewById(R.id.card_view);
-        view.setHasFixedSize(true);
-        view.setAdapter(adapter);
-        view.setLayoutManager(manager);
+    public void test() {
+        final StatisticsApi statisticsApi = ApiUtils.createStatisticsApi();
+
+        statisticsApi.loadStatistics(new Callback<StatisticsResponse>() {
+            @Override
+            public void success(StatisticsResponse statisticsResponse, Response response) {
+                statistics.addAll(statisticsResponse.getWards());
+                adapter.notifyDataSetChanged();
+//                ttt();
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+
+            }
+        });
+    }
+
+    public void ttt() {
+        this.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                adapter.notifyDataSetChanged();
+            }
+        });
     }
 }

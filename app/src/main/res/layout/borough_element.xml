@@ -1,38 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <android.support.v7.widget.CardView
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/card_element"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:layout_margin="5dp"
+    android:orientation="horizontal"
+    card_view:cardCornerRadius="5dp">
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_height="wrap_content">
 
         <ImageView
             android:id="@+id/imageStat"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:contentDescription="@string/abc_action_bar_home_description" />
+            android:layout_height="100dp"
+            android:scaleType="centerCrop"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
 
-        <LinearLayout
+        <TextView
+            android:id="@+id/statType"
+            android:gravity="center"
+            android:background="?android:selectableItemBackground"
+            android:focusable="true"
+            android:clickable="true"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="horizontal">
+            android:layout_height="100dp"
+            android:textSize="24sp"
+            android:textColor="@android:color/white"
+            android:layout_below="@+id/imageStat"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_toLeftOf="@+id/ratingBar"
+            android:layout_toStartOf="@+id/ratingBar" />
 
-            <TextView
-                android:id="@+id/textStat"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" />
-
-            <TextView
-                android:id="@+id/valueStat"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" />
-        </LinearLayout>
-
-
-    </LinearLayout>
+        <RatingBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/ratingBar"
+            android:layout_alignBottom="@+id/statType"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true" />
+    </RelativeLayout>
 </android.support.v7.widget.CardView>

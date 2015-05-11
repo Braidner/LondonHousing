@@ -40,7 +40,7 @@
             android:label="@string/title_activity_borough" >
         </activity>
         <activity
-            android:name=".InstallActivity"
+            android:name=".activity.InstallActivity"
             android:label="@string/title_activity_install" >
         </activity>
     </application>

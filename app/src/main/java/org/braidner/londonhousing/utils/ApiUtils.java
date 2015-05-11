@@ -7,6 +7,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonParseException;
 
 import org.braidner.londonhousing.api.MapItApi;
+import org.braidner.londonhousing.api.StatisticsApi;
 
 import java.lang.reflect.Type;
 import java.util.Date;
@@ -20,6 +21,14 @@ import retrofit.converter.GsonConverter;
 public class ApiUtils {
 
     public static MapItApi createMapItApi() {
+        return createApi(MapItApi.class, MapItApi.MAP_IT_URL);
+    }
+
+    public static StatisticsApi createStatisticsApi() {
+        return createApi(StatisticsApi.class, StatisticsApi.STATISTICS_URL);
+    }
+
+    private static <T> T createApi(Class<T> clazz, String url) {
         GsonBuilder builder = new GsonBuilder();
 
         builder.registerTypeAdapter(Date.class, new JsonDeserializer<Date>() {
@@ -29,10 +38,10 @@ public class ApiUtils {
         });
 
         RestAdapter adapter = new RestAdapter.Builder()
-                .setEndpoint(MapItApi.MAP_IT_URL)
+                .setEndpoint(url)
                 .setConverter(new GsonConverter(builder.create()))
                 .setLogLevel(RestAdapter.LogLevel.FULL)
                 .build();
-        return adapter.create(MapItApi.class);
+        return adapter.create(clazz);
     }
 }

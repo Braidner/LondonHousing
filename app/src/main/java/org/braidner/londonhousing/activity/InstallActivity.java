@@ -1,9 +1,11 @@
-package org.braidner.londonhousing;
+package org.braidner.londonhousing.activity;
 
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+
+import org.braidner.londonhousing.R;
 
 
 public class InstallActivity extends ActionBarActivity {
