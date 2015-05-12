@@ -10,13 +10,13 @@ import java.util.List;
 public class WardsHolder {
 
     @SerializedName("data")
-    private List<Ward> wards;
+    private List<WardJson> wardJsons;
 
-    public List<Ward> getWards() {
-        return wards;
+    public List<WardJson> getWardJsons() {
+        return wardJsons;
     }
 
-    public void setWards(List<Ward> wards) {
-        this.wards = wards;
+    public void setWardJsons(List<WardJson> wardJsons) {
+        this.wardJsons = wardJsons;
     }
 }

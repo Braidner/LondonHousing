@@ -27,11 +27,10 @@
             android:value="@string/google_maps_key" />
 
         <activity
-            android:name=".activity.LondonActivity"
+            android:name=".activity.InstallActivity"
             android:label="@string/title_activity_london" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -40,7 +39,7 @@
             android:label="@string/title_activity_borough" >
         </activity>
         <activity
-            android:name=".activity.InstallActivity"
+            android:name=".activity.LondonActivity"
             android:label="@string/title_activity_install" >
         </activity>
     </application>

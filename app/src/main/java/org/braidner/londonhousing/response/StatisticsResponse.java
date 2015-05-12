@@ -1,4 +1,6 @@
-package org.braidner.londonhousing.model;
+package org.braidner.londonhousing.response;
+
+import org.braidner.londonhousing.model.StatisticsWard;
 
 import java.util.List;
 

@@ -11,14 +11,22 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Polygon;
 import com.google.android.gms.maps.model.PolygonOptions;
+import com.j256.ormlite.android.apptools.OpenHelperManager;
 
 import org.braidner.londonhousing.R;
+import org.braidner.londonhousing.dao.BoroughDao;
+import org.braidner.londonhousing.dao.CommonDao;
+import org.braidner.londonhousing.entity.Borough;
+import org.braidner.londonhousing.entity.Point;
 import org.braidner.londonhousing.model.Geometry;
 import org.braidner.londonhousing.model.Location;
 import org.braidner.londonhousing.model.WardsHolder;
+import org.braidner.londonhousing.utils.ApiUtils;
 import org.braidner.londonhousing.utils.JsonLoader;
+import org.braidner.londonhousing.utils.OrmUtils;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -27,8 +35,9 @@ import java.util.Map;
 public class LondonActivity extends Activity implements OnMapReadyCallback, GoogleMap.OnMapClickListener {
 
     private final LatLng london = new LatLng(51.5085300, -0.1257400);
+    private OrmUtils ormUtils;
+    private List<Borough> boroughs;
     private List<Location> locations = new ArrayList<>();
-    private WardsHolder wardsHolder;
     private Map<Float, Polygon> polygons = new HashMap<>();
 
     @Override
@@ -40,45 +49,18 @@ public class LondonActivity extends Activity implements OnMapReadyCallback, Goog
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
-        try {
-//            locations.add(JsonLoader.loadLondonPolygon(this, R.raw.barking_and_dagenham));
-//            locations.add(JsonLoader.loadLondonPolygon(this, R.raw.barnet));
-//            locations.add(JsonLoader.loadLondonPolygon(this, R.raw.bexley));
-//            locations.add(JsonLoader.loadLondonPolygon(this, R.raw.brent));
-//            locations.add(JsonLoader.loadLondonPolygon(this, R.raw.bromley));
-//            locations.add(JsonLoader.loadLondonPolygon(this, R.raw.camden));
-//            locations.add(JsonLoader.loadLondonPolygon(this, R.raw.city_of_london));
-//            locations.add(JsonLoader.loadLondonPolygon(this, R.raw.city_of_westminster));
-//            locations.add(JsonLoader.loadLondonPolygon(this, R.raw.croydon));
-//            locations.add(JsonLoader.loadLondonPolygon(this, R.raw.ealing));
-//            locations.add(JsonLoader.loadLondonPolygon(this, R.raw.enfield));
-//            locations.add(JsonLoader.loadLondonPolygon(this, R.raw.greenwich));
-//            locations.add(JsonLoader.loadLondonPolygon(this, R.raw.hackney));
-//            locations.add(JsonLoader.loadLondonPolygon(this, R.raw.hammersmith_and_fulham));
-//            locations.add(JsonLoader.loadLondonPolygon(this, R.raw.haringey));
-//            locations.add(JsonLoader.loadLondonPolygon(this, R.raw.harrow));
-//            locations.add(JsonLoader.loadLondonPolygon(this, R.raw.havering));
-//            locations.add(JsonLoader.loadLondonPolygon(this, R.raw.hillingdon));
-//            locations.add(JsonLoader.loadLondonPolygon(this, R.raw.hounslow));
-//            locations.add(JsonLoader.loadLondonPolygon(this, R.raw.islington));
-//            locations.add(JsonLoader.loadLondonPolygon(this, R.raw.kensington_and_chelsea));
-//            locations.add(JsonLoader.loadLondonPolygon(this, R.raw.kingston_upon_thames));
-//            locations.add(JsonLoader.loadLondonPolygon(this, R.raw.lambeth));
-//            locations.add(JsonLoader.loadLondonPolygon(this, R.raw.lewisham));
-//            locations.add(JsonLoader.loadLondonPolygon(this, R.raw.merton));
-//            locations.add(JsonLoader.loadLondonPolygon(this, R.raw.newham));
-//            locations.add(JsonLoader.loadLondonPolygon(this, R.raw.redbridge));
-//            locations.add(JsonLoader.loadLondonPolygon(this, R.raw.richmond_upon_thames));
-//            locations.add(JsonLoader.loadLondonPolygon(this, R.raw.southwark));
-//            locations.add(JsonLoader.loadLondonPolygon(this, R.raw.sutton));
-//            locations.add(JsonLoader.loadLondonPolygon(this, R.raw.tower_hamlets));
-//            locations.add(JsonLoader.loadLondonPolygon(this, R.raw.waltham_forest));
-//            locations.add(JsonLoader.loadLondonPolygon(this, R.raw.wandsworth));
+        initDB();
 
-            wardsHolder = JsonLoader.loadWardsHolder(this, R.raw.wards);
-        } catch (IOException e) {
+        try {
+            final BoroughDao boroughDao = (BoroughDao) ormUtils.getDaoByClass(Borough.class);
+            boroughs = boroughDao.searchAll();
+        } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    private void initDB() {
+        ormUtils = OpenHelperManager.getHelper(this.getApplicationContext(), OrmUtils.class);
     }
 
     @Override
@@ -114,29 +96,29 @@ public class LondonActivity extends Activity implements OnMapReadyCallback, Goog
         }
     }
 
-    public boolean isPointInPolygon(LatLng p, List<LatLng> points) {
-        double minX = points.get(0).latitude;
-        double maxX = points.get(0).latitude;
-        double minY = points.get(0).longitude;
-        double maxY = points.get(0).longitude;
+    public boolean isPointInPolygon(LatLng p, List<Point> points) {
+        float minX = points.get(0).getLatitude();
+        float maxX = points.get(0).getLatitude();
+        float minY = points.get(0).getLongitude();
+        float maxY = points.get(0).getLongitude();
 
-        for (LatLng point : points) {
-            minX = Math.min(point.latitude, minX);
-            maxX = Math.max(point.latitude, maxX);
-            minY = Math.min(point.longitude, minY);
-            maxY = Math.max(point.longitude, maxY);
+        for (Point point : points) {
+            minX = Math.min(point.getLatitude(), minX);
+            maxX = Math.max(point.getLatitude(), maxX);
+            minY = Math.min(point.getLongitude(), minY);
+            maxY = Math.max(point.getLongitude(), maxY);
         }
 
         if (p.latitude < minX || p.latitude > maxX || p.longitude < minY || p.longitude > maxY) {
             return false;
         }
 
-        final LatLng[] polygon = points.toArray(new LatLng[points.size()]);
+        final Point[] polygon = points.toArray(new Point[points.size()]);
 
         boolean inside = false;
         for (int i = 0, j = polygon.length - 1; i < polygon.length; j = i++) {
-            if ((polygon[i].longitude > p.longitude) != (polygon[j].longitude > p.longitude) &&
-                    p.latitude < (polygon[j].latitude - polygon[i].latitude) * (p.longitude - polygon[i].longitude) / (polygon[j].longitude - polygon[i].longitude) + polygon[i].latitude) {
+            if ((polygon[i].getLongitude() > p.longitude) != (polygon[j].getLongitude() > p.longitude) && p.latitude <
+                    (polygon[j].getLatitude() - polygon[i].getLatitude()) * (p.longitude - polygon[i].getLongitude()) / (polygon[j].getLongitude() - polygon[i].getLongitude()) + polygon[i].getLatitude()) {
                 inside = !inside;
             }
         }
@@ -146,20 +128,12 @@ public class LondonActivity extends Activity implements OnMapReadyCallback, Goog
 
     @Override
     public void onMapClick(LatLng latLng) {
-        System.out.println(latLng);
-        String boroughName = null;
-
-        final Intent intent = new Intent(this, BoroughActivity.class);
-        intent.putExtra("BoroughName", boroughName);
-        startActivity(intent);
-
-        for (Map.Entry<Float, Polygon> entry : polygons.entrySet()) {
-            final Polygon polygon = entry.getValue();
-            if (isPointInPolygon(latLng, polygon.getPoints())) {
-                polygon.setVisible(true);
-                boroughName = String.valueOf(entry.getKey());
-                System.out.println("Polygon id " + entry.getKey());
-                return;
+        for (Borough borough : boroughs) {
+            if (isPointInPolygon(latLng, new ArrayList<>(borough.getPolygon()))) {
+                final Intent intent = new Intent(this, BoroughActivity.class);
+                intent.putExtra("BoroughCode", borough.getCode());
+                startActivity(intent);
+                break;
             }
         }
     }
