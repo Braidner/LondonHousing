@@ -3,13 +3,13 @@ package org.braidner.londonhousing.entity;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.field.ForeignCollectionField;
 
+import java.io.Serializable;
 import java.util.Collection;
-import java.util.List;
 
 /**
  * Created by smith / 12.05.2015.
  */
-public class Ward implements Indexed {
+public class Ward implements Indexed, Serializable {
 
     public static final String NAME = "name";
     public static final String CODE = "code";
@@ -25,6 +25,15 @@ public class Ward implements Indexed {
 
     @DatabaseField(foreign = true, foreignAutoRefresh = true)
     private Borough borough;
+
+    @DatabaseField
+    private String lat;
+
+    @DatabaseField
+    private String lon;
+
+    @DatabaseField
+    private String MapItId;
 
     @ForeignCollectionField(eager = true)
     private Collection<WardProperty> properties;
@@ -67,5 +76,29 @@ public class Ward implements Indexed {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public String getLat() {
+        return lat;
+    }
+
+    public void setLat(String lat) {
+        this.lat = lat;
+    }
+
+    public String getLon() {
+        return lon;
+    }
+
+    public void setLon(String lon) {
+        this.lon = lon;
+    }
+
+    public String getMapItId() {
+        return MapItId;
+    }
+
+    public void setMapItId(String mapItId) {
+        MapItId = mapItId;
     }
 }

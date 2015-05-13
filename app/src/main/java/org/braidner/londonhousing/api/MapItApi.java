@@ -1,8 +1,7 @@
 package org.braidner.londonhousing.api;
 
-import org.braidner.londonhousing.model.Location;
+import org.braidner.londonhousing.response.GeometryResponse;
 import org.braidner.londonhousing.response.MapItResponse;
-import org.braidner.londonhousing.response.MapWardResponse;
 
 import retrofit.Callback;
 import retrofit.client.Response;
@@ -21,5 +20,8 @@ public interface MapItApi {
 
     @GET("/area/{locationCode}/children")
     void findBoroughChildes(@Path("locationCode") String locationCode, Callback<Response> callback);
+
+    @GET("/area/{locationCode}/geometry")
+    void loadGeometry(@Path("locationCode") String locationCode, Callback<GeometryResponse> callback);
 
 }

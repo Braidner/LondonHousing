@@ -12,9 +12,12 @@ import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 import org.braidner.londonhousing.R;
+import org.braidner.londonhousing.entity.Ward;
 import org.braidner.londonhousing.model.StatisticsWard;
 
+import java.util.Collection;
 import java.util.List;
+import java.util.SimpleTimeZone;
 
 /**
  * Created by smith / 04.05.2015.
@@ -22,10 +25,13 @@ import java.util.List;
 public class BoroughAdapter extends RecyclerView.Adapter<BoroughAdapter.ViewHolder> {
 
     private List<StatisticsWard> statistics;
+    private Collection<Ward> wards;
     private static DisplayImageOptions displayImageOptions;
+    private final String IMAGE_BASE = "http://maps.googleapis.com/maps/api/streetview?";
 
-    public BoroughAdapter(List<StatisticsWard> statistics) {
+    public BoroughAdapter(List<StatisticsWard> statistics, Collection<Ward> wards) {
         this.statistics = statistics;
+        this.wards = wards;
         displayImageOptions = new DisplayImageOptions.Builder()
                 .resetViewBeforeLoading(true)
                 .build();
@@ -39,13 +45,23 @@ public class BoroughAdapter extends RecyclerView.Adapter<BoroughAdapter.ViewHold
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        ImageLoader.getInstance().displayImage("http://www.ebminsurance.com.au/files/photos/Transport_Banner3.jpg", holder.imageView, displayImageOptions);
-
         StatisticsWard ward = statistics.get(position);
+//        http://maps.googleapis.com/maps/api/streetview?size=400x400&location=40.720032,%20-73.988354&fov=90&heading=235&pitch=10&sensor=false
 
-        holder.transportProperty.setText("Òðàíñïîðò");
-        holder.crimeProperty.setText("Ïðåñòóïíîñòü");
-        holder.housePriceProperty.setText("Ñðåäíÿÿ öåíà");
+        Ward entityWard = new Ward();
+
+        for (Ward tmp : wards) {
+            if (tmp.getCode().equals(ward.getCode())) entityWard = tmp;
+        }
+
+        String url = IMAGE_BASE + "size=700x300" + "&location=" + entityWard.getLat() + "," + entityWard.getLon() + "&sensor=false&key=AIzaSyDNtZqaVZPJV5hPeoivr7IkZk_gXhbqow8";
+
+        ImageLoader.getInstance().displayImage(url, holder.imageView, displayImageOptions);
+        holder.wardName.setText(ward.getWardName());
+
+        holder.transportProperty.setText("Ð¢Ñ€Ð°Ð½ÑÐ¿Ð¾Ñ€Ñ‚");
+        holder.crimeProperty.setText("ÐŸÑ€ÐµÑÑ‚ÑƒÐ¿Ð½Ð¾ÑÑ‚ÑŒ");
+        holder.housePriceProperty.setText("Ð¦ÐµÐ½Ñ‹ Ð½Ð° Ð¶Ð¸Ð»ÑŒÐµ");
 
         holder.transportRating.setRating(ward.getTransportRate());
         holder.crimeRating.setRating(ward.getCrimeRate());
@@ -60,6 +76,7 @@ public class BoroughAdapter extends RecyclerView.Adapter<BoroughAdapter.ViewHold
     class ViewHolder extends RecyclerView.ViewHolder {
 
         private ImageView imageView;
+        private TextView wardName;
 
         private TextView transportProperty;
         private TextView crimeProperty;
@@ -72,6 +89,7 @@ public class BoroughAdapter extends RecyclerView.Adapter<BoroughAdapter.ViewHold
         public ViewHolder(View itemView) {
             super(itemView);
             imageView = (ImageView) itemView.findViewById(R.id.imageStat);
+            wardName = (TextView) itemView.findViewById(R.id.wardName);
 
             transportProperty = (TextView) itemView.findViewById(R.id.transportProperty);
             crimeProperty = (TextView) itemView.findViewById(R.id.crimeProperty);

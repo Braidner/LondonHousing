@@ -131,7 +131,8 @@ public class LondonActivity extends Activity implements OnMapReadyCallback, Goog
         for (Borough borough : boroughs) {
             if (isPointInPolygon(latLng, new ArrayList<>(borough.getPolygon()))) {
                 final Intent intent = new Intent(this, BoroughActivity.class);
-                intent.putExtra("BoroughCode", borough.getCode());
+                borough.setPolygon(null);
+                intent.putExtra("borough", borough);
                 startActivity(intent);
                 break;
             }

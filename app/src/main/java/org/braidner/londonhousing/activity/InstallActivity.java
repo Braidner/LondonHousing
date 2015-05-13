@@ -18,6 +18,7 @@ import org.braidner.londonhousing.entity.Borough;
 import org.braidner.londonhousing.entity.Point;
 import org.braidner.londonhousing.entity.Ward;
 import org.braidner.londonhousing.model.Location;
+import org.braidner.londonhousing.response.GeometryResponse;
 import org.braidner.londonhousing.response.MapItResponse;
 import org.braidner.londonhousing.response.StatisticsResponse;
 import org.braidner.londonhousing.utils.ApiUtils;
@@ -81,18 +82,6 @@ public class InstallActivity extends Activity {
         }
     };
 
-    private Callback<StatisticsResponse> statisticCallback = new Callback<StatisticsResponse>() {
-        @Override
-        public void success(StatisticsResponse statisticsResponse, Response response) {
-
-        }
-
-        @Override
-        public void failure(RetrofitError error) {
-
-        }
-    };
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -134,12 +123,13 @@ public class InstallActivity extends Activity {
                     final MapItResponse value = entry.getValue();
 
                     Ward ward = new Ward();
-                    ward.setId(value.getId());
+                    ward.setMapItId(String.valueOf(value.getId()));
                     ward.setCode(value.getCodes().getGss());
                     ward.setBorough(borough);
                     ward.setName(value.getName());
 
                     boroughDao.saveWard(ward, wardDao);
+                    updateGeometryWards(ward, boroughDao, wardDao);
                 }
             }
 
@@ -148,7 +138,22 @@ public class InstallActivity extends Activity {
                 error.printStackTrace();
             }
         });
+    }
 
+    private void updateGeometryWards(final Ward ward, final BoroughDao boroughDao, final CommonDao wardDao) {
+        mapItApi.loadGeometry(ward.getMapItId(), new Callback<GeometryResponse>() {
+            @Override
+            public void success(GeometryResponse geometryResponse, Response response) {
+                ward.setLat(geometryResponse.getLat());
+                ward.setLon(geometryResponse.getLon());
+                boroughDao.saveWard(ward, wardDao);
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+
+            }
+        });
     }
 
 

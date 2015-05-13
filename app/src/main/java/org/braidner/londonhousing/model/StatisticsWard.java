@@ -1,5 +1,7 @@
 package org.braidner.londonhousing.model;
 
+import com.google.gson.annotations.SerializedName;
+
 /**
  * Created by smith / 10.05.2015.
  */
@@ -15,6 +17,7 @@ public class StatisticsWard {
 
     private Float crimeRate;
 
+    @SerializedName("transport")
     private Float transportRate;
 
     public String getWardName() {

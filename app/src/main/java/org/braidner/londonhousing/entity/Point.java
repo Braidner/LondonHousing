@@ -2,10 +2,12 @@ package org.braidner.londonhousing.entity;
 
 import com.j256.ormlite.field.DatabaseField;
 
+import java.io.Serializable;
+
 /**
  * Created by smith / 12.05.2015.
  */
-public class Point implements Indexed {
+public class Point implements Indexed, Serializable {
 
     public static final String LATITUDE = "latitude";
     public static final String LONGITUDE = "longitude";
