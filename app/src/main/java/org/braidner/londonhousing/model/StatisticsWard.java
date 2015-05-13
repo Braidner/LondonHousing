@@ -13,9 +13,9 @@ public class StatisticsWard {
 
     private String housePrice;
 
-    private String crimeRate;
+    private Float crimeRate;
 
-    private String robberyRate;
+    private Float transportRate;
 
     public String getWardName() {
         return wardName;
@@ -49,19 +49,19 @@ public class StatisticsWard {
         this.housePrice = housePrice;
     }
 
-    public String getCrimeRate() {
+    public Float getCrimeRate() {
         return crimeRate;
     }
 
-    public void setCrimeRate(String crimeRate) {
+    public void setCrimeRate(Float crimeRate) {
         this.crimeRate = crimeRate;
     }
 
-    public String getRobberyRate() {
-        return robberyRate;
+    public Float getTransportRate() {
+        return transportRate;
     }
 
-    public void setRobberyRate(String robberyRate) {
-        this.robberyRate = robberyRate;
+    public void setTransportRate(Float transportRate) {
+        this.transportRate = transportRate;
     }
 }

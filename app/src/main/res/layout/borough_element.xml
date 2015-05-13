@@ -20,9 +20,53 @@
             android:layout_height="157dp"
             android:scaleType="centerCrop"/>
 
-        <ListView
-            android:id="@+id/propertyList"
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/transportProperty"
+                android:layout_width="0dp"
+                android:layout_height="40dp"
+                android:layout_weight=".50"/>
+            <RatingBar
+                android:id="@+id/transportRating"
+                android:layout_width="0dp"
+                android:layout_height="40dp"
+                android:layout_weight=".50" />
+        </LinearLayout>
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/crimeProperty"
+                android:layout_width="0dp"
+                android:layout_height="40dp"
+                android:layout_weight=".50"/>
+            <RatingBar
+                android:id="@+id/crimeRating"
+                android:layout_width="0dp"
+                android:layout_height="40dp"
+                android:layout_weight=".50" />
+        </LinearLayout>
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/housePriceProperty"
+                android:layout_width="0dp"
+                android:layout_height="40dp"
+                android:layout_weight=".50"/>
+            <RatingBar
+                android:id="@+id/housePriceRating"
+                android:layout_width="0dp"
+                android:layout_height="40dp"
+                android:layout_weight=".50" />
+        </LinearLayout>
     </LinearLayout>
 </android.support.v7.widget.CardView>
